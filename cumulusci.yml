@@ -7,6 +7,9 @@ project:
     git:
         default_branch: 'main'
     source_format: sfdx
+    dependencies:
+      - version_id: 04tKY000000Pd9AYAS
+      - github: https://github.com/aaronwinters/cfdemo-learner-support-base
 
 tasks:
     robot:
@@ -23,3 +26,12 @@ tasks:
     run_tests:
         options:
             required_org_code_coverage_percent: 75
+
+flows:
+    ci_feature:
+        steps:
+            4:
+                task: dx
+                options:
+                    command: force:apex:test:run
+                    extra: --outputdir ./tests/apex --wait 20 --codecoverage --resultformat json

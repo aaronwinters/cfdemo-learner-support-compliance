@@ -1,0 +1,82 @@
+name: Pull Request to Main Branch
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+env:
+  CUMULUSCI_SERVICE_github: ${{ secrets.CUMULUSCI_SERVICE_github }}
+
+jobs:
+  validate-build:
+    name: validate-deploy-and-test
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the source code
+      - name: "Checkout source code"
+        uses: actions/checkout@v4
+
+      # Install Salesforce CLI & Authorize DevHub
+      - name: "Install Salesforce CLI"
+        run: |
+          mkdir sfdx
+          wget -qO- https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz | tar xJ -C sfdx --strip-components 1
+          echo $(realpath sfdx/bin) >> $GITHUB_PATH
+      - name: Authenticate Dev Hub
+        run: |
+          echo ${{ secrets.DEVHUB_SFDX_URL }} > ./ENV_SFDX_URL.txt
+          sfdx force:auth:sfdxurl:store -f ./ENV_SFDX_URL.txt -d
+
+      # Install CumulusCI & Dependencies
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
+      - name: Install CumulusCI
+        run: |
+          python -m pip install -U pip
+          pip install cumulusci
+
+      # Create directory to save coverage report if necessary
+      - name: Create Directory for Test Results
+        run: |
+          mkdir -p tests/apex
+
+      # Build Scratch Org & Get Coverage Report using CCI Flow
+      - name: Build Org and Execute Tests
+        run: |
+          cci flow run ci_feature --org dev
+
+      # Delete Scratch org
+      - name: Delete Scratch Org
+        if: ${{ always() }}
+        run: |
+          cci org scratch_delete dev
+
+      # Save code coverage for next job
+      - name: "Make report available"
+        uses: actions/upload-artifact@v4
+        with:
+          name: apex-code-coverage
+          path: tests/apex/test-result-codecoverage.json # Wildcards can be used to filter the files copied into the container. See: https://github.com/actions/upload-artifact
+
+  sonar-scan:
+    needs: validate-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      # Download the code coverage report
+      - name: "Download coverage result from previous job"
+        uses: actions/download-artifact@v4
+        with:
+          name: apex-code-coverage
+          path: tests/apex
+
+      # Use Sonar Cloud action with sonar-project.properties to scan project
+      - name: "Sonar Cloud scan"
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
