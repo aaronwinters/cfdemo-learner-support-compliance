@@ -1,0 +1,25 @@
+minimum_cumulusci_version: '3.64.0'
+project:
+    name: cfdemo-learner-support-compliance
+    package:
+        name: learner-support-compliance
+        api_version: '55.0'
+    git:
+        default_branch: 'main'
+    source_format: sfdx
+
+tasks:
+    robot:
+        options:
+            suites: robot/cfdemo-learner-support-compliance/tests
+            options:
+                outputdir: robot/cfdemo-learner-support-compliance/results
+
+    robot_testdoc:
+        options:
+            path: robot/cfdemo-learner-support-compliance/tests
+            output: robot/cfdemo-learner-support-compliance/doc/cfdemo-learner-support-compliance_tests.html
+
+    run_tests:
+        options:
+            required_org_code_coverage_percent: 75

@@ -1,0 +1,26 @@
+# Salesforce / SFDX / CCI
+.cci
+.sfdx
+/src.orig
+/src
+mdapioutput/
+.sf
+# Python
+*.pyc
+__pycache__
+
+# Robot Framework results
+robot/businesssystems-gere-salesforce/results/
+foo.json
+
+# Editors
+*.sublime-project
+*.sublime-workspace
+.vscode/settings.json
+.idea
+.project
+.settings
+
+# Misc
+.DS_Store
+
