@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Compliance_Check__c</fullName>
+    <externalId>false</externalId>
+    <label>Compliance Check</label>
+    <referenceTo>Compliance_Check__c</referenceTo>
+    <relationshipLabel>Compliance Check Items</relationshipLabel>
+    <relationshipName>Compliance_Check</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>
