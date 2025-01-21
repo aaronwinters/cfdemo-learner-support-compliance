@@ -41,3 +41,7 @@ flows:
                 task: assign_permission_sets
                 options:
                     api_names: Compliance_User
+            6:
+                task: command
+                options: 
+                    command: cci org default dev
