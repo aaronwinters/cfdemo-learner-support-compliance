@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Learning_Experience_Type__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>Learning Experience Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>Traditional</fullName>
+                <default>true</default>
+                <label>Traditional</label>
+            </value>
+            <value>
+                <fullName>Work-based</fullName>
+                <default>false</default>
+                <label>Work-based</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
