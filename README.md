@@ -27,3 +27,7 @@ Verify DevHub and GitHub service
 1. Add and commit changes to feature branch `git add .` and `git commit -m "Issue Key: descriptive commit message"`
 1. Push feature branch to GitHub and create a pull request to *main* branch for review `git push origin feature/issue-key-descriptiveBranchName`
 1. Delete the scratch org `cci org scratch_delete dev`
+
+## Release Process
+* Create a beta unlocked package `cci flow run release_unlocked_beta --org dev`
+* Create a production version package `cci flow run release_unlocked_production --org dev`
